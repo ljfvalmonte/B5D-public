@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technology Adoption: From Radio to AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --ink: #1a1613;
+    --ink-sec: #5c574f;
+    --ink-muted: #9b9589;
+    --border: #e5e0d8;
+    --grid: #ece8e1;
+    --radio: #b07328;
+    --tv: #2d6a4f;
+    --computer: #4361a5;
+    --internet: #7b2cbf;
+    --smartphone: #0d7377;
+    --smartspeaker: #c77dba;
+    --chatbot: #d94f30;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    background: var(--bg);
+    font-family: 'Manrope', sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+  .embed-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 400px;
+    padding: 1rem 1.25rem 0.75rem;
+  }
+
+  /* ─── Compact header ─── */
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .title-row h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1rem, 2.5vw, 1.45rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .title-row h1 span { color: var(--chatbot); }
+
+  .title-row .source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+    color: var(--ink-sec);
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+    line-height: 1.45;
+  }
+
+  /* ─── Chart ─── */
+  .chart-area {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+  }
+
+  .chart-area canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ─── Legend ─── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.75rem;
+    padding: 0.6rem 0 0.4rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.4rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--ink-sec);
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .legend-item:hover { background: var(--grid); }
+  .legend-item:active { background: var(--border); }
+  .legend-item.dimmed { opacity: 0.25; }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── Bottom attribution ─── */
+  .attrib {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    color: var(--ink-muted);
+    text-align: right;
+    padding: 0.25rem 0;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+<div class="embed-wrap">
+
+  <div class="title-row">
+    <h1>How Fast Does Tech <span>Reach America?</span></h1>
+    <span class="source">Bridge5D &middot; Corrected Data</span>
+  </div>
+  <div class="subtitle">% U.S. adoption by years since commercial launch. Click legend items to compare. Hover/tap data points for details.</div>
+
+  <div class="chart-area">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <div class="legend" id="legend"></div>
+  <div class="attrib">Sources: Pew Research, Census Bureau, Our World in Data, Nielsen, Voicebot.ai &middot; 2026</div>
+
+</div>
+
+<script>
+const D = [
+  {
+    label: 'Radio (1920)',
+    color: '#b07328',
+    pts: [[0,0],[2,2],[5,10],[8,28],[10,46],[12,60],[15,70],[18,80],[20,82]],
+  },
+  {
+    label: 'Television (1948)',
+    color: '#2d6a4f',
+    pts: [[0,0],[1,3],[2,9],[3,26],[5,50],[7,67],[10,87],[12,90],[15,94],[17,96]],
+  },
+  {
+    label: 'Personal Computer (1977)',
+    color: '#4361a5',
+    pts: [[0,0],[3,2],[7,8],[12,15],[16,23],[18,30],[20,37],[23,51],[25,58],[26,62]],
+  },
+  {
+    label: 'Internet (1991)',
+    color: '#7b2cbf',
+    pts: [[0,0],[2,3],[4,14],[6,22],[8,37],[9,44],[10,50],[12,55],[15,61],[16,62],[19,71]],
+  },
+  {
+    label: 'Smartphone (2007)',
+    color: '#0d7377',
+    pts: [[0,0],[1,5],[2,12],[3,21],[4,35],[5,44],[6,56],[7,64],[8,68],[10,75],[11,77],[14,85]],
+  },
+  {
+    label: 'Smart Speaker (2014)',
+    color: '#c77dba',
+    pts: [[0,0],[1,1],[2,3],[3,8],[4,21],[5,28],[6,35],[7,43],[8,50]],
+  },
+  {
+    label: 'AI Chatbot (2022)',
+    color: '#d94f30',
+    pts: [[0,0],[0.15,2],[0.5,8],[1,18],[1.5,23],[2,26],[2.3,34],[3,42]],
+  },
+];
+
+const ctx = document.getElementById('chart').getContext('2d');
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    datasets: D.map(d => ({
+      label: d.label,
+      data: d.pts.map(p => ({ x: p[0], y: p[1] })),
+      borderColor: d.color,
+      backgroundColor: 'transparent',
+      borderWidth: d.label.includes('AI Chatbot') ? 3.5 : 2.2,
+      pointRadius: d.label.includes('AI Chatbot') ? 4 : 2.5,
+      pointHoverRadius: 7,
+      pointBackgroundColor: d.color,
+      pointBorderColor: '#faf8f4',
+      pointBorderWidth: 1.5,
+      pointHitRadius: 12,
+      tension: 0.38,
+      fill: false,
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600, easing: 'easeOutQuart' },
+    interaction: { mode: 'nearest', axis: 'xy', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1613',
+        titleColor: '#faf8f4',
+        bodyColor: '#e5e0d8',
+        borderColor: '#3a352e',
+        borderWidth: 1,
+        padding: { top: 8, bottom: 8, left: 12, right: 12 },
+        cornerRadius: 6,
+        titleFont: { family: "'JetBrains Mono', monospace", size: 11, weight: '500' },
+        bodyFont: { family: "'Manrope', sans-serif", size: 12, weight: '500' },
+        displayColors: true,
+        boxWidth: 8,
+        boxHeight: 8,
+        boxPadding: 4,
+        callbacks: {
+          title: function(items) { return items[0].dataset.label; },
+          label: function(c) {
+            const yr = c.parsed.x;
+            const pct = c.parsed.y;
+            let yrStr;
+            if (yr === 0) yrStr = 'At launch';
+            else if (yr < 1) yrStr = Math.round(yr * 12) + ' months';
+            else if (yr === Math.floor(yr)) yrStr = yr + ' years';
+            else yrStr = yr.toFixed(1) + ' years';
+            return ' ' + yrStr + '  →  ' + pct + '% adoption';
+          }
+        }
+      },
+      annotation: {
+        annotations: {
+          pct25: {
+            type: 'line', yMin: 25, yMax: 25,
+            borderColor: '#d4cec4', borderWidth: 1, borderDash: [3, 5],
+            label: { display: true, content: '25%', position: 'start',
+              backgroundColor: 'transparent', color: '#b5b0a6',
+              font: { size: 9, family: "'JetBrains Mono'" }, padding: {left:0,right:4,top:0,bottom:0}, yAdjust: -1 }
+          },
+          pct50: {
+            type: 'line', yMin: 50, yMax: 50,
+            borderColor: '#c4bdb3', borderWidth: 1, borderDash: [3, 5],
+            label: { display: true, content: '50% — Mass Adoption Threshold', position: 'end',
+              backgroundColor: 'rgba(250,248,244,0.85)', color: '#7a756c',
+              font: { size: 9, family: "'JetBrains Mono'" }, padding: {left:6,right:6,top:2,bottom:2}, yAdjust: -1 }
+          },
+          pct75: {
+            type: 'line', yMin: 75, yMax: 75,
+            borderColor: '#d4cec4', borderWidth: 1, borderDash: [3, 5],
+            label: { display: true, content: '75%', position: 'start',
+              backgroundColor: 'transparent', color: '#b5b0a6',
+              font: { size: 9, family: "'JetBrains Mono'" }, padding: {left:0,right:4,top:0,bottom:0}, yAdjust: -1 }
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        type: 'linear', min: 0, max: 22,
+        title: {
+          display: true,
+          text: 'Years Since Commercial Introduction',
+          font: { family: "'Manrope'", size: 11, weight: '600' },
+          color: '#5c574f', padding: { top: 8 }
+        },
+        ticks: {
+          stepSize: 5,
+          callback: v => v === 0 ? 'Launch' : v + ' yrs',
+          font: { family: "'JetBrains Mono'", size: 9 },
+          color: '#9b9589'
+        },
+        grid: { color: '#ece8e1', drawTicks: false },
+        border: { color: '#d4cec4' }
+      },
+      y: {
+        min: 0, max: 100,
+        title: {
+          display: true,
+          text: '% U.S. Adoption',
+          font: { family: "'Manrope'", size: 11, weight: '600' },
+          color: '#5c574f', padding: { bottom: 4 }
+        },
+        ticks: {
+          stepSize: 25,
+          callback: v => v + '%',
+          font: { family: "'JetBrains Mono'", size: 9 },
+          color: '#9b9589'
+        },
+        grid: { color: '#ece8e1', drawTicks: false },
+        border: { color: '#d4cec4' }
+      }
+    }
+  }
+});
+
+// ─── Interactive Legend ───
+const legendEl = document.getElementById('legend');
+D.forEach((d, i) => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.setAttribute('role', 'button');
+  item.setAttribute('tabindex', '0');
+  item.innerHTML = '<span class="legend-dot" style="background:' + d.color + '"></span>' + d.label;
+
+  function toggle() {
+    const meta = chart.getDatasetMeta(i);
+    meta.hidden = !meta.hidden;
+    item.classList.toggle('dimmed', meta.hidden);
+    chart.update();
+  }
+
+  item.addEventListener('click', toggle);
+  item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  legendEl.appendChild(item);
+});
+</script>
+</body>
+</html>
