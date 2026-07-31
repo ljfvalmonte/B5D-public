@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__Google_Drive__create_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c 'if (.tool_input.parentId // \"\" | length) > 0 then empty else {hookSpecificOutput: {hookEventName: \"PreToolUse\", permissionDecision: \"deny\", permissionDecisionReason: \"Blocked: no parentId set, so this file would land in the My Drive root. Per CLAUDE.md, save Claude-created files to the Claude Artifacts folder — retry with parentId: 1pDGihLhXyxeCPsWrnaLwKjFXSeLTIRr2 (or the folder Leslie explicitly requested).\"}} end'",
+            "statusMessage": "Checking Drive save location"
+          }
+        ]
+      }
+    ]
+  }
+}

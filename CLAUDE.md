@@ -18,3 +18,20 @@ content — never shrink the type. Readability beats density every time.
 
 When editing an existing file, raise any font size found below the floor to
 at least the floor value.
+
+## Saving Deliverables to Google Drive (non-negotiable)
+
+**Every document or artifact Claude creates for Leslie must be saved to the
+"Claude Artifacts" folder in Google Drive — never to the My Drive root.**
+
+- Folder name: `Claude Artifacts`
+- Folder ID: `1pDGihLhXyxeCPsWrnaLwKjFXSeLTIRr2`
+- Link: https://drive.google.com/drive/folders/1pDGihLhXyxeCPsWrnaLwKjFXSeLTIRr2
+
+When creating any file in Google Drive — Google Docs, Sheets, Slides, or
+uploaded files (.docx, .pptx, .pdf, .html, images, etc.) — always pass
+`parentId: 1pDGihLhXyxeCPsWrnaLwKjFXSeLTIRr2` on the create/upload call.
+Copies made with `copy_file` count too.
+
+Only exception: Leslie explicitly names a different destination folder for a
+specific file. Subfolders created inside Claude Artifacts are also fine.
