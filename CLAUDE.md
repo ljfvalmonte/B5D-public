@@ -1,74 +1,46 @@
 # B5D Project Instructions
 
-## Document & Design Formatting Standards (non-negotiable)
+This repo is public. It publishes Bridge5D's interactive artifacts through
+GitHub Pages, at `https://ljfvalmonte.github.io/B5D-public/<filename>`, and
+Leslie embeds them in Canva slides (Apps → Embeds → paste the link). Keep
+private details (email addresses, Drive or Airtable IDs, client data) out of
+every file here, including this one.
 
-**Minimum font size: 10 point — no exceptions.** This applies to every
-deliverable created in this project: Word docs, PDFs, Google Docs, slides,
-HTML pages, infographics, charts, and exports to Canva/Miro/Gamma.
+When you add an artifact, add a row to the README table with its live link.
 
-Conversions of the 10pt floor by medium:
-- Print / docs / PDFs / slides: 10pt minimum
-- Web / HTML / infographics: 13.5px or 0.84rem minimum (at 16px root size)
-- Charts and data visualizations: axis labels, legends, annotations, and
-  data labels all count — they are the most common violators
+## Minimum font size: 10 point
 
-This includes footnotes, captions, photo credits, chart labels, table cells,
-and fine print. If content does not fit at 10pt, cut or restructure the
-content — never shrink the type. Readability beats density every time.
+Every deliverable stays at 10pt or larger, because Leslie's audiences include
+people reading on projectors, phones, and printouts, and small type shuts them
+out. This covers Word docs, PDFs, Google Docs, slides, HTML pages,
+infographics, charts, and exports to Canva, Miro, or Gamma.
 
-When editing an existing file, raise any font size found below the floor to
-at least the floor value.
+- Print, docs, PDFs: 10pt minimum
+- Slides: 10pt minimum; in practice 18pt body and 12pt chart labels
+- Web, HTML, infographics: 0.875rem (14px) minimum at a 16px root size
+- Charts: axis labels, legends, annotations, and data labels all count, and
+  they are where small type usually slips in
 
-## Google Drive Conventions
+Footnotes, captions, photo credits, table cells, and fine print count too. If
+content does not fit at the floor, cut or restructure it rather than shrinking
+the type. When you edit an existing file, raise anything below the floor.
 
-Leslie's Drive (valmontebridges@gmail.com) has two dedicated Claude folders
-at the top level of My Drive:
+## Brand and voice
 
-**"Claude Downloads"** — folder ID `1sd532fR5ApWeNo--ki39IoL_jg_48RUN`
-- This is Leslie's intake folder. PDFs and reports she saves (McKinsey
-  pieces, NAAIC reports, etc.) land here.
-- When she asks to "process" a report, "sweep downloads", or check for new
-  files, search this folder (`parentId = '1sd532fR5ApWeNo--ki39IoL_jg_48RUN'`)
-  and compare against existing Resources records in the Hub — process
-  anything not yet recorded.
-- After processing a PDF into the Hub, set the Resources record's File Link
-  field to the file's Drive link (https://drive.google.com/file/d/FILE_ID/view).
+Use the b5d-style-guide skill for colors, fonts, and layout, and the b5d-voice
+skill for anything written under Leslie's or Bridge5D's name. Framework names
+and attribution come from the b5d-frameworks skill.
 
-**"Claude Artifacts"** — folder ID `1pDGihLhXyxeCPsWrnaLwKjFXSeLTIRr2`
-- Any file Claude creates and saves to Leslie's Drive goes IN THIS FOLDER
-  (pass it as the parent when creating). Never save to Drive root or other
-  folders unless Leslie names a different destination.
+## Leslie's Drive and the AI Intelligence Hub
 
-## B5D AI Intelligence Hub (Airtable)
+Hub work (the Airtable base "B5D AI Intelligence Hub") follows the Google Doc
+"B5D AI Intelligence Hub: Operating Runbook"; read it before any Hub task. If
+it cannot be read, carry on with care and say so rather than stopping. Two
+Drive folders matter:
 
-**The Operating Runbook is authoritative, not this file.** Read it before any
-Hub work: Google Doc `19xa4zGL9tGGBfcZHT_sCnLAbMW1i7E64qLNJaKoQcUM`,
-"B5D AI Intelligence Hub: Operating Runbook". It defines Procedures A-E
-(capture, processing sweep, insight extraction, Friday digest, LinkedIn
-drafting) and the exact select-option vocabularies in Appendix A. Where this
-file and the runbook disagree, the runbook wins. If the runbook cannot be
-read, proceed with the notes below and say so rather than stopping.
+- **Claude Downloads** is Leslie's intake folder for reports to process.
+- **Claude Artifacts** is where files Claude saves to Drive go, unless Leslie
+  names another place.
 
-Base "B5D AI Intelligence Hub": `appRtBs7OyX7uPVMC`
-- Resources `tblTOTgiR9AabVm9o` · Insights `tblGKAokYQ94hC4SF` ·
-  Projects `tblupguFwH3YiNl0z` · LinkedIn Posts `tblceQzKft3E4g6tP` ·
-  Weekly Digests `tblmG7smi5j5euJrL`
-- There are **no Airtable-native automations**. Everything runs from a
-  scheduled routine or a conversation. When a routine breaks, capture keeps
-  working and enrichment stops silently — check routine run status first.
-
-Field handling (runbook Appendix B):
-- **Never edit** Raw Capture (`fldaKxojQ7jFiprx4`), or Leslie's Spark. They
-  are the paper trail.
-- **Why I Saved This** (`fldcUQJLQ2vBhcqKQ`): fill only if empty, mark it
-  "(Inferred — please confirm)", and flag it. Never overwrite her words.
-- **Source URL** (`fldzAye9xcAUnqlgB`) is the original online source, cleaned
-  of tracking parameters. **File Link** (`fldCoNqaF88YOdpro`) is Leslie's
-  archived copy, e.g. a Drive PDF. Not interchangeable — fill both when both
-  exist.
-- Claude owns Summary and Key Takeaway.
-- Before enriching, check for an existing record with the same canonical
-  Source URL. Flag duplicate pairs for Leslie; never delete one yourself.
-- New Insights start at Status = "Raw". Insight names lead with source and
-  substance ("MIT stat: 95% of AI pilots fail to reach production").
-- Use only the select options in runbook Appendix A.
+Never overwrite Leslie's own notes in the Hub, and flag duplicates for her
+instead of deleting them.
